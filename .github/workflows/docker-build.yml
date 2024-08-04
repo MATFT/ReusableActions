@@ -1,4 +1,4 @@
-name: Build and publish docker images to Azure Container Registry
+name: Build and push docker images to Azure Container Registry
 
 on:
   workflow_call:
@@ -20,19 +20,30 @@ on:
         type: string
         default: "src"
         description: "Source folder for the codes in the repository"
+      acr_server:
+        required: true
+        type: string
+        description: "Azure container registry server"
+      acr_user:
+        required: true
+        type: string
+        description: "Azure container registry user"
+      push:
+        required: false
+        type: boolean
+        default: true
+        description: "Push the image to the repository"
 
     secrets:
-      acr_name:
-        required: true
-      acr_username:
-        required: true
       acr_password:
         required: true
+        type: string
+        description: "Azure container registry password"
 
 jobs:
   build_job:
     name: Build and push the image to ACR
-    runs-on: [self-hosted, linux, X64]
+    runs-on: ubuntu-latest
     steps:
       - name: Checkout
         uses: actions/checkout@v4
@@ -48,15 +59,15 @@ jobs:
       - name: Login to Azure Container Registry
         uses: azure/docker-login@v1
         with:
-          login-server: ${{ secrets.acr_name }}
-          username: ${{ secrets.acr_username }}
+          login-server: ${{ secrets.acr_server }}
+          username: ${{ secrets.acr_user }}
           password: ${{ secrets.acr_password }}
 
       - name: Build and push image to the container registry
         uses: docker/build-push-action@v2
         with:
-          push: true
-          tags: ${{ secrets.acr_name }}/${{ inputs.package_name }}:${{ inputs.semver }},${{ secrets.acr_name }}/${{ inputs.package_name }}:latest
+          push: ${{ inputs.push }}
+          tags: ${{ secrets.acr_server }}/${{ inputs.package_name }}:${{ inputs.semver }},${{ secrets.acr_server }}/${{ inputs.package_name }}:latest
           file: ${{ inputs.source_folder }}/${{ inputs.docker_project }}/Dockerfile
           context: ${{ inputs.source_folder }}
           build-args: |
