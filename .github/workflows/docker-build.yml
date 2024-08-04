@@ -34,10 +34,6 @@ on:
         default: true
         description: "Push the image to the repository"
 
-    secrets:
-      acr_password:
-        required: true
-
 jobs:
   build_job:
     name: Build and push the image to ACR
@@ -57,15 +53,15 @@ jobs:
       - name: Login to Azure Container Registry
         uses: azure/docker-login@v1
         with:
-          login-server: ${{ inputs.acr_server }}
-          username: ${{ inputs.acr_user }}
-          password: ${{ secrets.acr_password }}
+          login-server: ${{ vars.ACR_SERVER }}
+          username: ${{ vars.ACR_USER }}
+          password: ${{ secrets.ACR_PASSWORD }}
 
       - name: Build and push image to the container registry
         uses: docker/build-push-action@v2
         with:
           push: ${{ inputs.push }}
-          tags: ${{ inputs.acr_server }}/${{ inputs.package_name }}:${{ inputs.semver }},${{ inputs.acr_server }}/${{ inputs.package_name }}:latest
+          tags: ${{ vars.ACR_SERVER }}/${{ inputs.package_name }}:${{ inputs.semver }},${{ vars.ACR_SERVER }}/${{ inputs.package_name }}:latest
           file: ${{ inputs.source_folder }}/${{ inputs.docker_project }}/Dockerfile
           context: ${{ inputs.source_folder }}
           build-args: |
