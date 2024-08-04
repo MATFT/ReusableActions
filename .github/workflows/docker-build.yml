@@ -20,14 +20,6 @@ on:
         type: string
         default: "src"
         description: "Source folder for the codes in the repository"
-      acr_server:
-        required: true
-        type: string
-        description: "Azure container registry server"
-      acr_user:
-        required: true
-        type: string
-        description: "Azure container registry user"
       push:
         required: false
         type: boolean
