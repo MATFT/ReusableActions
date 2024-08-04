@@ -38,6 +38,7 @@ jobs:
           arguments: '/showConfig'
           
       - name: Calculate Version
+        id: gitversion
         uses: gittools/actions/gitversion/execute@v3.0.0
 
       - name: Change string case
