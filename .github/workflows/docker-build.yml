@@ -57,15 +57,15 @@ jobs:
       - name: Login to Azure Container Registry
         uses: azure/docker-login@v1
         with:
-          login-server: ${{ secrets.acr_server }}
-          username: ${{ secrets.acr_user }}
+          login-server: ${{ inputs.acr_server }}
+          username: ${{ inputs.acr_user }}
           password: ${{ secrets.acr_password }}
 
       - name: Build and push image to the container registry
         uses: docker/build-push-action@v2
         with:
           push: ${{ inputs.push }}
-          tags: ${{ secrets.acr_server }}/${{ inputs.package_name }}:${{ inputs.semver }},${{ secrets.acr_server }}/${{ inputs.package_name }}:latest
+          tags: ${{ inputs.acr_server }}/${{ inputs.package_name }}:${{ inputs.semver }},${{ inputs.acr_server }}/${{ inputs.package_name }}:latest
           file: ${{ inputs.source_folder }}/${{ inputs.docker_project }}/Dockerfile
           context: ${{ inputs.source_folder }}
           build-args: |
