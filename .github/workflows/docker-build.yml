@@ -37,8 +37,6 @@ on:
     secrets:
       acr_password:
         required: true
-        type: string
-        description: "Azure container registry password"
 
 jobs:
   build_job:
