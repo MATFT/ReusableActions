@@ -1,0 +1,51 @@
+name: Calculate version number
+
+on:
+  workflow_call:
+    inputs:
+      version_prefix:
+        required: false
+        type: string
+        default: ""
+        description: "Provides ability to choose a prefix, default is ''"
+    outputs:
+      semver:
+        description: "Semantic version number"
+        value: ${{ jobs.version_job.outputs.semver }}      
+      semver_lowercase:
+        description: "Semantic version number in lowercased"
+        value: ${{ jobs.version_job.outputs.semver_lowercase }}
+
+jobs:
+  version_job:
+    name: Calculate version number
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+          
+      - name: Install GitVersion
+        uses: gittools/actions/gitversion/setup@v3.0.0
+        with:
+          versionSpec: '6.x'
+          
+      - name: Display GitVersion config
+        uses: gittools/actions/gitversion/command@v3.0.0
+        with:
+          useConfigFile: true
+          arguments: '/showConfig'
+          
+      - name: Calculate Version
+        uses: gittools/actions/gitversion/execute@v3.0.0
+
+      - name: Change string case
+        id: changecase
+        uses: ASzc/change-string-case-action@v6
+        with:
+          string: ${{ inputs.version_prefix }}${{ steps.gitversion.outputs.semVer }}
+
+    outputs:
+      semver: ${{ steps.gitversion.outputs.semVer }}
+      semver_lowercase: ${{ steps.changecase.outputs.lowercase }}
