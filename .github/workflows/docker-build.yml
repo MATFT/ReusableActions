@@ -26,13 +26,9 @@ on:
         default: true
         description: "Push the image to the repository"
     outputs:
-      semver:
-        description: "Semantic version number"
-        value: ${{ jobs.version_job.outputs.semver }}      
-      semver_lowercase:
-        description: "Semantic version number in lowercased"
-        value: ${{ jobs.version_job.outputs.semver_lowercase }}
-
+      imageid:
+        description: "Image identifier"
+        value: ${{ jobs.build_image.outputs.imageid }}      
 jobs:
   build_job:
     name: Build and push the image to ACR
@@ -58,6 +54,7 @@ jobs:
 
       - name: Build and push the image to the container registry
         uses: docker/build-push-action@v6
+        id: build_image
         with:
           push: ${{ inputs.push }}
           tags: ${{ format('{0}/{1}:{2}',vars.ACR_SERVER, inputs.package_name, inputs.semver) }}
