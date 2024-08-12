@@ -27,9 +27,8 @@ on:
         description: "Push the image to the repository"
 
 env:
-  PACKAGE_PREFIX=${{vars.ACR_SERVER}}/${{inputs.package_name}}
-  PACKAGE_NAME=${{env.PACKAGE_NAME}}:${{inputs.semver}}
-  PACKAGE_NAME_LATEST=${{env.PACKAGE_NAME}}:latest
+  PACKAGE_NAME=${{vars.ACR_SERVER}}/${{inputs.package_name}}:${{inputs.semver}}
+  PACKAGE_NAME_LATEST=${{vars.ACR_SERVER}}/${{inputs.package_name}}:latest
   
 jobs:
   build_job:
