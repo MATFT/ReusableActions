@@ -1,0 +1,39 @@
+name: Build and push docker images to Azure Container Registry
+
+on:
+  workflow_call:
+    inputs:
+      image_id:
+        required: true
+        description: "Image identifier"
+        type: string
+      container_app_name:
+        required: true
+        description: "Container app name"
+        type: string
+      resource_group:
+        required: true
+        description: "Container app resource group"
+        type: string
+      environment_variables:
+        required: true
+        description: "List of environment variables. Space-separated values in 'key=value' format. Empty string to clear existing values. Prefix value with 'secretref:' to reference a secret."
+        type: string
+    
+jobs:
+  deploy_job:
+    name: Deploy image to container apps
+    runs-on: ubuntu-latest
+    steps:
+      - name: Log in to Azure
+        uses: azure/login@v1
+        with:
+          creds: ${{ secrets.AZURE_CREDENTIALS }}
+
+      - name: Deploy image to Container App
+        uses: azure/container-apps-deploy-action@v1
+        with:
+          imageToDeploy: ${{ inputs.image_id }}
+          containerAppName: ${{ inputs.container_app_name }}
+          resourceGroup: ${{ inputs.resource_group }}
+          environmentVariables: ${{ inputs.environment_variables }}
