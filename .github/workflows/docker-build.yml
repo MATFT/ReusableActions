@@ -57,7 +57,7 @@ jobs:
         uses: docker/build-push-action@v6
         with:
           push: ${{ inputs.push }}
-          tags: ${{ github.ref == 'refs/heads/main' && format('{0},{1}', env.PACKAGE_NAME, env.PACKAGE_NAME_LATEST) || format('{0},env.PACKAGE_NAME) }}
+          tags: ${{ github.ref == 'refs/heads/main' && format('{0}/{1}:{2},{0}/{1}:latest',vars.ACR_SERVER, inputs.package_name, inputs.semver) || format('{0}/{1}:{2}',vars.ACR_SERVER, inputs.package_name, inputs.semver) }}
           file: ${{ inputs.source_folder }}/${{ inputs.docker_project }}/Dockerfile
           context: ${{ inputs.source_folder }}
           build-args: |
