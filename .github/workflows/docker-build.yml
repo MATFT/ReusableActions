@@ -51,7 +51,7 @@ jobs:
       - name: Sets env vars for staging
         run: |
           echo "DOCKER_IMAGE_NAME=${{ vars.ACR_SERVER }}/${{ inputs.package_name }}:${{ inputs.semver }}" >> $GITHUB_ENV
-        if: startsWith(github.ref, 'refs/heads/main') === false
+        if: {{!startsWith(github.ref,'refs/heads/main')}}
 
       - name: Login to Azure Container Registry
         uses: azure/docker-login@v2
