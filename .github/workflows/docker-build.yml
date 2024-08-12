@@ -26,10 +26,6 @@ on:
         default: true
         description: "Push the image to the repository"
 
-env:
-  PACKAGE_NAME=${{vars.ACR_SERVER}}/${{inputs.package_name}}:${{inputs.semver}}
-  PACKAGE_NAME_LATEST=${{vars.ACR_SERVER}}/${{inputs.package_name}}:latest
-  
 jobs:
   build_job:
     name: Build and push the image to ACR
