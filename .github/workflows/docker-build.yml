@@ -28,9 +28,10 @@ on:
     outputs:
       imageid:
         description: "Image identifier"
-        value: ${{ jobs.build_image.outputs.imageid }}      
+        value: ${{ jobs.build_image.outputs.imageid }} 
+
 jobs:
-  build_job:
+  build_image:
     name: Build and push the image to ACR
     runs-on: ubuntu-latest
     steps:
@@ -57,8 +58,8 @@ jobs:
         id: build_image
         with:
           push: ${{ inputs.push }}
-          tags: ${{ format('{0}/{1}:{2}',vars.ACR_SERVER, inputs.package_name, inputs.semver) }}
           file: ${{ inputs.source_folder }}/${{ inputs.docker_project }}/Dockerfile
           context: ${{ inputs.source_folder }}
-          build-args: |
-            VERSION=${{ inputs.semver }}
+          tags: |
+            ${{ format('{0}/{1}:{2}', vars.ACR_SERVER, inputs.package_name, inputs.semver) }}
+            ${{ inputs.push && format('{0}/{1}:latest', vars.ACR_SERVER, inputs.package_name) || ''}}
