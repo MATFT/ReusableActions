@@ -15,6 +15,11 @@ on:
         required: true
         description: "Container app resource group"
         type: string
+      environment:
+        required: false
+        type: string
+        default: development
+        description: "deployment environment"
       environment_variables:
         required: true
         description: "List of environment variables. Space-separated values in 'key=value' format. Empty string to clear existing values. Prefix value with 'secretref:' to reference a secret."
