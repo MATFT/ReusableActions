@@ -24,7 +24,11 @@ on:
         required: true
         description: "List of environment variables. Space-separated values in 'key=value' format. Empty string to clear existing values. Prefix value with 'secretref:' to reference a secret."
         type: string
-    
+
+permissions:
+  id-token: write
+  contents: read
+ 
 jobs:
   deploy_image:
     name: Deploy image to container apps
