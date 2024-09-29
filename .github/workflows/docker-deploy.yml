@@ -26,14 +26,16 @@ on:
         type: string
     
 jobs:
-  deploy_job:
+  deploy_image:
     name: Deploy image to container apps
     runs-on: ubuntu-latest
     steps:
       - name: Log in to Azure
         uses: azure/login@v2
         with:
-          creds: ${{ secrets.AZURE_CREDENTIALS }}
+          client-id: ${{ secrets.AZURE_GITHUB_ACTION_APPLICATION_ID }}
+          tenant-id: ${{ secrets.AZURE_TENANT_ID }}
+          subscription-id: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
 
       - name: Deploy image to Container App
         uses: azure/container-apps-deploy-action@v1
