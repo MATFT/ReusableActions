@@ -21,7 +21,7 @@ on:
         default: development
         description: "deployment environment"
       environment_variables:
-        required: true
+        required: false
         description: "List of environment variables. Space-separated values in 'key=value' format. Empty string to clear existing values. Prefix value with 'secretref:' to reference a secret."
         type: string
 
